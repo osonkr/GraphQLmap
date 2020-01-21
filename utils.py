@@ -25,9 +25,10 @@ def getHeaders(headers):
     headers_dict = {}
 
     for header in headers:
-        for key, val in header.split("="):
-            headers_dict[key] = val
+        splits = header.split("=", 1)
+        headers_dict[splits[0]] = splits[1]
 
+    print(headers_dict)
     return headers_dict
 
 
