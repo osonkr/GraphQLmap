@@ -24,12 +24,11 @@ def jq(data):
 def getHeaders(headers):
     headers_dict = {}
 
-    if headers:
-        for key,val in headers.split("="):
+    for header in headers:
+        for key, val in header.split("="):
             headers_dict[key] = val
 
     return headers_dict
-
 
 
 def requester(URL, method, headers, payload):
