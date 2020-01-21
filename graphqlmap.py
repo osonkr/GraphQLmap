@@ -16,6 +16,7 @@ class GraphQLmap(object):
     method   = "POST"
     args = None
     url  = None
+    headers = None
 
     def __init__(self, args):
         print("   _____                 _      ____  _                            ")
@@ -29,6 +30,7 @@ class GraphQLmap(object):
         print(" "*30 + f"\033[1mAuthor\033[0m: {self.author} \033[1mVersion\033[0m: {self.version} ")
         self.args = args
         self.url = args.url
+        self.headers = args.headers
         self.method = args.method
 
         while True:
@@ -41,28 +43,28 @@ class GraphQLmap(object):
                 display_help()
             
             elif query == "debug":
-                display_types(self.url, self.method)
+                display_types(self.url, self.method, self.headers)
 
             elif query == "dump_new":
-                dump_schema(self.url, self.method, 15)
+                dump_schema(self.url, self.method, self.headers, 15)
 
             elif query == "dump_old":
-                dump_schema(self.url, self.method, 14)
+                dump_schema(self.url, self.method, self.headers, 14)
 
             elif query == "nosqli":
-                blind_nosql(self.url, self.method)
+                blind_nosql(self.url, self.method, self.headers)
 
             elif query == "postgresqli":
-                blind_postgresql(self.url, self.method)
+                blind_postgresql(self.url, self.method, self.headers)
 
             elif query == "mysqli":
-                blind_mysql(self.url, self.method)
+                blind_mysql(self.url, self.method, self.headers)
                 
             elif query == "mssqli":
-                blind_mssql(self.url, self.method)
+                blind_mssql(self.url, self.method, self.headers)
 
             else:
-                exec_advanced(args.url, self.method, query)
+                exec_advanced(args.url, self.method, self.headers, query)
 
 if __name__ == "__main__":
     readline.set_completer(auto_completer)

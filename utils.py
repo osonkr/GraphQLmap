@@ -21,17 +21,28 @@ def jq(data):
     return json.dumps(data, indent=4, sort_keys=True)
 
 
-def requester(URL, method, payload):
+def getHeaders(headers):
+    headers_dict = {}
+
+    if headers:
+        for key,val in headers.split("="):
+            headers_dict[key] = val
+
+    return headers_dict
+
+
+
+def requester(URL, method, headers, payload):
     if method == "POST":
         data = {
             "query": payload.replace("+", " ")
         }
-        r = requests.post(URL, data=data, verify=False)
+        r = requests.post(URL, data=data, verify=False, headers=getHeaders(headers))
         if r.status_code == 500:
             print("\033[91m/!\ API didn't respond correctly to a POST method !\033[0m")
             return None
     else:
-        r = requests.get( URL+"?query={}".format(payload), verify=False)
+        r = requests.get( URL+"?query={}".format(payload), verify=False, headers=getHeaders(headers))
     return r
 
 
@@ -40,6 +51,7 @@ def parse_args():
     parser.add_argument('-u', action ='store', dest='url',  help="URL to query : example.com/graphql?query={}")
     parser.add_argument('-v', action ='store', dest='verbosity', help="Enable verbosity", nargs='?', const=True)
     parser.add_argument('--method', action ='store', dest='method', help="HTTP Method to use interact with /graphql endpoint", nargs='?',  const=True, default="GET")
+    parser.add_argument('-H', action='append', dest='headers', help="Custom headers to use when requesting /graphql endpoint")
     results = parser.parse_args() 
     if results.url == None:
         parser.print_help()
